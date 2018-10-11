@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.papyrus.infra.core.model">
+      <model
+            classname="ca.jahed.papyrusrt.persistence.PapyrusModel"
+            fileExtension=".uml"
+            required="true">
+      </model>
+   </extension>
+   <extension
+         point="org.eclipse.emf.transaction.listeners">
+      <listener
+            class="ca.jahed.papyrusrt.persistence.ModelSetListener">
+      </listener>
+   </extension>
+
+</plugin>

@@ -1,0 +1,434 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+	<extension
+		point="org.eclipse.ui.editors">
+		<editor
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.XtextEditor"
+			contributorClass="org.eclipse.ui.editors.text.TextEditorActionContributor"
+			default="true"
+			extensions="persist"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			name="Persist Editor">
+		</editor>
+	</extension>
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclarationHandler"
+			commandId="org.eclipse.xtext.ui.editor.hyperlinking.OpenDeclaration">
+			<activeWhen>
+				<reference
+					definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+		<handler
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.handler.ValidateActionHandler"
+			commandId="ca.jahed.papyrusrt.persistence.dsl.Persist.validate">
+		<activeWhen>
+			<reference
+					definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+			</reference>
+		</activeWhen>
+		</handler>
+		<!-- copy qualified name -->
+		<handler
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName">
+			<activeWhen>
+				<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened" />
+			</activeWhen>
+		</handler>
+		<handler
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedNameHandler"
+			commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName">
+			<activeWhen>
+				<and>
+					<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.XtextEditor.opened" />
+					<iterate>
+						<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+					</iterate>
+				</and>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.expressions.definitions">
+		<definition id="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+			<and>
+				<reference definitionId="isActiveEditorAnInstanceOfXtextEditor"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="ca.jahed.papyrusrt.persistence.dsl.Persist"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+		<definition id="ca.jahed.papyrusrt.persistence.dsl.Persist.XtextEditor.opened">
+			<and>
+				<reference definitionId="isXtextEditorActive"/>
+				<with variable="activeEditor">
+					<test property="org.eclipse.xtext.ui.editor.XtextEditor.languageName"
+						value="ca.jahed.papyrusrt.persistence.dsl.Persist"
+						forcePluginActivation="true"/>
+				</with>
+			</and>
+		</definition>
+	</extension>
+	<extension
+			point="org.eclipse.ui.preferencePages">
+		<page
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			name="Persist">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+		</page>
+		<page
+			category="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.syntaxcoloring.SyntaxColoringPreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.coloring"
+			name="Syntax Coloring">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+		</page>
+		<page
+			category="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.templates.XtextTemplatePreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.templates"
+			name="Templates">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+		</page>
+	</extension>
+	<extension
+			point="org.eclipse.ui.propertyPages">
+		<page
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.preferences.LanguageRootPreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			name="Persist">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension
+		point="org.eclipse.ui.keywords">
+		<keyword
+			id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"
+			label="Persist"/>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+	<command
+			description="Trigger expensive validation"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.validate"
+			name="Validate">
+	</command>
+	<!-- copy qualified name -->
+	<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+	</command>
+	<command
+			id="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+			categoryId="org.eclipse.ui.category.edit"
+			description="Copy the qualified name for the selected element"
+			name="Copy Qualified Name">
+	</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			 <command
+				 commandId="ca.jahed.papyrusrt.persistence.dsl.Persist.validate"
+				 style="push"
+				 tooltip="Trigger expensive validation">
+			<visibleWhen checkEnabled="false">
+				<reference
+					definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+				</reference>
+			</visibleWhen>
+		</command>
+		</menuContribution>
+		<!-- copy qualified name -->
+		<menuContribution locationURI="popup:#TextEditorContext?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="menu:edit?after=copy">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.EditorCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+		<menuContribution locationURI="popup:org.eclipse.xtext.ui.outline?after=additions">
+			<command commandId="org.eclipse.xtext.ui.editor.copyqualifiedname.OutlineCopyQualifiedName"
+				style="push" tooltip="Copy Qualified Name">
+				<visibleWhen checkEnabled="false">
+					<and>
+						<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.XtextEditor.opened" />
+						<iterate>
+							<adapt type="org.eclipse.xtext.ui.editor.outline.IOutlineNode" />
+						</iterate>
+					</and>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?endof=group.find">
+			<command commandId="org.eclipse.xtext.ui.editor.FindReferences">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.findrefs.FindReferencesHandler"
+			commandId="org.eclipse.xtext.ui.editor.FindReferences">
+			<activeWhen>
+				<reference
+					definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.core.contenttype.contentTypes">
+		<content-type
+			base-type="org.eclipse.core.runtime.text"
+			file-extensions="persist"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.contenttype"
+			name="Persist File"
+			priority="normal">
+		</content-type>
+	</extension>
+	<!-- adding resource factories -->
+	<extension
+		point="org.eclipse.emf.ecore.extension_parser">
+		<parser
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.resource.IResourceFactory"
+			type="persist">
+		</parser>
+	</extension>
+	<extension point="org.eclipse.xtext.extension_resourceServiceProvider">
+		<resourceServiceProvider
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.resource.IResourceUIServiceProvider"
+			uriExtension="persist">
+		</resourceServiceProvider>
+	</extension>
+	<!-- marker definitions for ca.jahed.papyrusrt.persistence.dsl.Persist -->
+	<extension
+			id="persist.check.fast"
+			name="Persist Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.fast"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="persist.check.normal"
+			name="Persist Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.normal"/>
+		<persistent value="true"/>
+	</extension>
+	<extension
+			id="persist.check.expensive"
+			name="Persist Problem"
+			point="org.eclipse.core.resources.markers">
+		<super type="org.eclipse.xtext.ui.check.expensive"/>
+		<persistent value="true"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.validation.ValidatorPreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.validator.preferencePage"
+			name="Errors/Warnings">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.xtext.builder.participant">
+		<participant
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.builder.IXtextBuilderParticipant"
+			fileExtensions="persist"/>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.compiler.preferencePage"
+			name="Compiler">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.propertyPages">
+		<page
+			category="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.builder.preferences.BuilderPreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.compiler.propertyPage"
+			name="Compiler">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+			<enabledWhen>
+				<adapt type="org.eclipse.core.resources.IProject"/>
+			</enabledWhen>
+			<filter name="projectNature" value="org.eclipse.xtext.ui.shared.xtextNature"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution locationURI="popup:#TextEditorContext?after=xtext.ui.openDeclaration">
+			<command
+				commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand"
+				id="ca.jahed.papyrusrt.persistence.dsl.Persist.OpenGeneratedCode"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened" />
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.handlers">
+		<handler
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.generator.trace.OpenGeneratedFileHandler"
+			commandId="org.eclipse.xtext.ui.OpenGeneratedFileCommand">
+			<activeWhen>
+				<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened" />
+			</activeWhen>
+		</handler>
+	</extension>
+	<!-- Quick Outline -->
+	<extension
+		point="org.eclipse.ui.handlers">
+		<handler 
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.outline.quickoutline.ShowQuickOutlineActionHandler"
+			commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline">
+			<activeWhen>
+				<reference
+					definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension
+		point="org.eclipse.ui.commands">
+		<command
+			description="Open the quick outline."
+			id="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+			name="Quick Outline">
+		</command>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.open">
+			<command commandId="org.eclipse.xtext.ui.editor.outline.QuickOutline"
+				style="push"
+				tooltip="Open Quick Outline">
+				<visibleWhen checkEnabled="false">
+					<reference definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened"/>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<!-- quickfix marker resolution generator for ca.jahed.papyrusrt.persistence.dsl.Persist -->
+	<extension
+			point="org.eclipse.ui.ide.markerResolution">
+		<markerResolutionGenerator
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="ca.jahed.papyrusrt.persistence.dsl.ui.persist.check.fast">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="ca.jahed.papyrusrt.persistence.dsl.ui.persist.check.normal">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+		<markerResolutionGenerator
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.quickfix.MarkerResolutionGenerator"
+			markerType="ca.jahed.papyrusrt.persistence.dsl.ui.persist.check.expensive">
+			<attribute
+				name="FIXABLE_KEY"
+				value="true">
+			</attribute>
+		</markerResolutionGenerator>
+	</extension>
+	<!-- Rename Refactoring -->
+	<extension point="org.eclipse.ui.handlers">
+		<handler 
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.DefaultRenameElementHandler"
+			commandId="org.eclipse.xtext.ui.refactoring.RenameElement">
+			<activeWhen>
+				<reference
+					definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+				</reference>
+			</activeWhen>
+		</handler>
+	</extension>
+	<extension point="org.eclipse.ui.menus">
+		<menuContribution
+			locationURI="popup:#TextEditorContext?after=group.edit">
+			<command commandId="org.eclipse.xtext.ui.refactoring.RenameElement"
+				style="push">
+				<visibleWhen checkEnabled="false">
+					<reference
+						definitionId="ca.jahed.papyrusrt.persistence.dsl.Persist.Editor.opened">
+					</reference>
+				</visibleWhen>
+			</command>
+		</menuContribution>
+	</extension>
+	<extension point="org.eclipse.ui.preferencePages">
+		<page
+			category="ca.jahed.papyrusrt.persistence.dsl.Persist"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.refactoring.ui.RefactoringPreferencePage"
+			id="ca.jahed.papyrusrt.persistence.dsl.Persist.refactoring"
+			name="Refactoring">
+			<keywordReference id="ca.jahed.papyrusrt.persistence.dsl.ui.keyword_Persist"/>
+		</page>
+	</extension>
+	<extension point="org.eclipse.compare.contentViewers">
+		<viewer id="ca.jahed.papyrusrt.persistence.dsl.Persist.compare.contentViewers"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="persist">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="ca.jahed.papyrusrt.persistence.dsl.Persist.contenttype"
+			contentViewerId="ca.jahed.papyrusrt.persistence.dsl.Persist.compare.contentViewers" />
+	</extension>
+	<extension point="org.eclipse.compare.contentMergeViewers">
+		<viewer id="ca.jahed.papyrusrt.persistence.dsl.Persist.compare.contentMergeViewers"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.compare.InjectableViewerCreator"
+			extensions="persist" label="Persist Compare">
+		</viewer>
+		<contentTypeBinding
+			contentTypeId="ca.jahed.papyrusrt.persistence.dsl.Persist.contenttype"
+			contentMergeViewerId="ca.jahed.papyrusrt.persistence.dsl.Persist.compare.contentMergeViewers" />
+	</extension>
+	<extension point="org.eclipse.ui.editors.documentProviders">
+		<provider id="ca.jahed.papyrusrt.persistence.dsl.Persist.editors.documentProviders"
+			class="ca.jahed.papyrusrt.persistence.dsl.ui.PersistExecutableExtensionFactory:org.eclipse.xtext.ui.editor.model.XtextDocumentProvider"
+			extensions="persist">
+		</provider>
+	</extension>
+	<extension point="org.eclipse.team.core.fileTypes">
+		<fileTypes
+			extension="persist"
+			type="text">
+		</fileTypes>
+	</extension>
+</plugin>

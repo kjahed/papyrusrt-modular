@@ -1,0 +1,71 @@
+grammar ca.jahed.papyrusrt.persistence.dsl.Persist with org.eclipse.xtext.common.Terminals
+
+generate persist "http://www.jahed.ca/papyrusrt/persistence/dsl/Persist"
+
+Persist:
+	'model' model=STRING '{'
+		(statements+=RuleStatement)*
+	'}'
+;
+
+RuleStatement:
+	'rule' id=ID '{'
+		rules+=(ForEachStatement)*
+	'}'	
+;
+
+ForEachStatement:
+	'foreach' class=EClassName '{'
+		(contents+=CreateStatement
+			| calls += CallStatement)*
+	'}'
+;
+
+CreateStatement:
+	(CreateFileStatement | CreateFolderStatement)
+;
+
+CreateFolderStatement:
+	'create' 'folder' name=FileName '{'
+		(contents += CreateStatement
+			| calls += CallStatement)*
+	'}'
+;
+
+CreateFileStatement:
+	'save' 'in' name=FileName ( (includedReferencing=WithStatement) | (includedAttributes=IncludeStatement))?
+;
+
+FileName:
+	(prefix=STRING | attr=EAttributeName) ('+' right=FileName)?
+;
+
+IncludeStatement:
+	'include' (
+		included+=EReferenceName (',' included+=EReferenceName)*
+	)
+;
+
+WithStatement:
+	'with' 'referencing' (
+		included+=EClassName (',' included+=EClassName)*
+	)
+;
+
+CallStatement:
+	'call' (
+		rules+=ID (',' rules+=ID)*
+	)
+;
+
+EClassName:
+	base=ID ('.'fields+=ID)*
+;
+
+EAttributeName:
+	base=ID ('.'fields+=ID)*
+;
+
+EReferenceName:
+	base=ID ('.'fields+=ID)*
+;

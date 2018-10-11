@@ -1,0 +1,30 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: ca.jahed.papyrusrt.persistence.dsl
+Bundle-ManifestVersion: 2
+Bundle-Name: ca.jahed.papyrusrt.persistence.dsl
+Bundle-Vendor: My Company
+Bundle-Version: 1.0.0.qualifier
+Bundle-SymbolicName: ca.jahed.papyrusrt.persistence.dsl; singleton:=true
+Bundle-ActivationPolicy: lazy
+Require-Bundle: org.eclipse.xtext,
+ org.eclipse.xtext.xbase,
+ org.eclipse.equinox.common;bundle-version="3.5.0",
+ org.eclipse.emf.ecore,
+ org.eclipse.xtext.xbase.lib;bundle-version="2.14.0",
+ org.antlr.runtime,
+ org.eclipse.xtext.util,
+ org.eclipse.emf.common,
+ org.eclipse.xtend.lib;bundle-version="2.14.0"
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Export-Package: ca.jahed.papyrusrt.persistence.dsl.parser.antlr.internal,
+ ca.jahed.papyrusrt.persistence.dsl.parser.antlr,
+ ca.jahed.papyrusrt.persistence.dsl.services,
+ ca.jahed.papyrusrt.persistence.dsl.validation,
+ ca.jahed.papyrusrt.persistence.dsl.generator,
+ ca.jahed.papyrusrt.persistence.dsl.persist,
+ ca.jahed.papyrusrt.persistence.dsl.scoping,
+ ca.jahed.papyrusrt.persistence.dsl.persist.util,
+ ca.jahed.papyrusrt.persistence.dsl.serializer,
+ ca.jahed.papyrusrt.persistence.dsl,
+ ca.jahed.papyrusrt.persistence.dsl.persist.impl
+Import-Package: org.apache.log4j
